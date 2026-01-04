@@ -11,9 +11,12 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account,Long> {
 
+    Optional<Account> findById(Long id);
+
     Optional<Account> findByAccountNumber(String accountNumber);
 
     @Query(value = "SELECT * FROM accounts WHERE status = 'CLOSED'", nativeQuery = true)
     List<Account> findAllClosedAccounts();
 
+    boolean existsByAccountNumber(String accountNumber);
 }
