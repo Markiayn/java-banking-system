@@ -48,7 +48,5 @@ public class Transaction {
 
 
     // --- ENUM ---
-    public enum Status {
-        PENDING, SUCCESS, FAILED
-    }
+    public enum Status {PENDING, SUCCESS, FAILED}
 }
