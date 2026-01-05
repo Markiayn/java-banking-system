@@ -20,26 +20,16 @@ public class TransactionController {
 
     @PostMapping("/transfer")
     public ResponseEntity<String> transfer(@RequestBody TransferRequest request) {
-        try{
-            transactionService.transferMoney(
-                    request.getFromAccountNumber(),
-                    request.getToAccountNumber(),
-                    request.getAmount()
-            );
-            return ResponseEntity.ok("Transfer successful");
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (Exception e){
-            return ResponseEntity.status(500).body("Internal server error");
-        }
+        transactionService.transferMoney(
+                request.getFromAccountNumber(),
+                request.getToAccountNumber(),
+                request.getAmount()
+        );
+        return ResponseEntity.ok("Transfer successful");
     }
 
     @GetMapping("/{accountNumber}/history")
-    public ResponseEntity<List<TransactionResponse>> getTransactionHistory(@PathVariable String accountNumber){
-        try{
-            return ResponseEntity.ok(transactionService.getTransactionHistory(accountNumber));
-        } catch ( IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<List<TransactionResponse>> getTransactionHistory(@PathVariable String accountNumber) {
+        return ResponseEntity.ok(transactionService.getTransactionHistory(accountNumber));
     }
 }
