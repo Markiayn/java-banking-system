@@ -3,13 +3,17 @@ package ua.markiyan.bank.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.markiyan.bank.dto.response.TransactionResponse;
 import ua.markiyan.bank.entity.Account;
 import ua.markiyan.bank.entity.Transaction;
+import ua.markiyan.bank.mapper.TransactionMapper;
 import ua.markiyan.bank.repository.AccountRepository;
 import ua.markiyan.bank.repository.TransactionRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+
+
 
 
 @Service
@@ -18,6 +22,7 @@ public class TransactionService {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final TransactionMapper transactionMapper;
 
 
     @Transactional
@@ -79,10 +84,12 @@ public class TransactionService {
         System.out.println("Трансакція успішна");
     }
 
-    public List<Transaction> getTransactionHistory (String accountNumber) {
+    public List<TransactionResponse> getTransactionHistory (String accountNumber) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
 
-        return transactionRepository.findAllBySourceAccountOrTargetAccountOrderByCreatedAtDesc(account, account);
+        List<Transaction> transactions = transactionRepository.findAllBySourceAccountOrTargetAccountOrderByCreatedAtDesc(account, account);
+
+        return transactionMapper.toDtoList(transactions);
     }
 }
